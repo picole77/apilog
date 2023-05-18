@@ -1,27 +1,25 @@
 
+'use strict';
 
-const express = require('express')
-const router = express.Router()
-
-const authController  = require('../controllers/authController')
-
-
-// router para las vistas
-router.get('/',(req, res)=>{
+module.exports = (app) => {
+    const authController  = require('../controllers/AuthController')
+    const productController = require('../controllers/ProductController');
     
-    res.render('index')
-})
-router.get('/login',(req, res)=>{
-    res.render('login')
-})
-router.get('/register',(req, res)=>{
-    res.render('register')
-})
+    // router para las vistas
+    app.router('/login')
+    .post(authController.login)
 
+    app.router('/register')
+    .post(authController.register)
+    
+    app.router('/products/create')
+    .post(productController.create_product)
+    
+    app.router('/products/:productId')
+    .put(productController.update_product)
+    .delete(productController.delete_product)
 
+    app.router('/products/list')
+    .get(productController.select_product)
 
-// router para los metodos del controller
-router.post('/register',authController.register)
-router.post('/login',authController.login)
-
-module.exports = router
+}
