@@ -6,20 +6,16 @@ module.exports = (app) => {
     const productController = require('../controllers/ProductController');
     
     // router para las vistas
-    app.router('/login')
-    .post(authController.login)
+    app.post('/login', authController.login)
 
-    app.router('/register')
-    .post(authController.register)
+    app.post('/register', authController.register)
     
-    app.router('/products/create')
-    .post(productController.create_product)
+    app.post('/products/create', productController.create_product)
     
-    app.router('/products/:productId')
-    .put(productController.update_product)
-    .delete(productController.delete_product)
+    app.put('/products/:productId', productController.update_product)
+    
+    app.delete('/products/:productId',productController.delete_product)
 
-    app.router('/products/list')
-    .get(productController.select_product)
+    app.get('/products/list', productController.select_product)
 
 }

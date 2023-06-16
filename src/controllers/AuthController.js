@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
 const bcryptjs = require ('bcryptjs')
-const conexion = require('../database/db')
+const conexion = require('../database/conexion')
 const {promisify} = require('util')
 const { CREATE_USER, SELECT_USER } = require('../services/MysqlQueries')
 
