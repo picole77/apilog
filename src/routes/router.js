@@ -10,12 +10,12 @@ module.exports = (app) => {
 
     app.post('/register', authController.register)
     
-    app.post('/products/create', productController.create_product)
+    app.post('/api/articulos/', productController.create_product)
     
-    app.put('/products/:productId', productController.update_product)
+    app.put('/api/articulos/:productId', productController.update_product)
     
-    app.delete('/products/:productId',productController.delete_product)
+    app.delete('/api/articulos/:productId',productController.delete_product)
 
-    app.get('/products/list', productController.select_product)
+    app.get('/api/articulos', productController.select_product)
 
 }

@@ -6,7 +6,7 @@ exports.create_product = (req, res) => {
     if(!req.body) {
         res.status(401).json({ "status": false, "message": "Ingrese todos los campos obligatorios"})
     }
-    const { product, name, stock } = req.body
+    const { descripcion, precio, stock } = req.body
     conexion.query(CREATE_PRODUCT, [product, name, stock], (error, results) => {
         if(error) {
             res.status(409).json({ "status": false, "message":"Ocurrió un error al crear el producto"})

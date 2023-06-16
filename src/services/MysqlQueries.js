@@ -1,8 +1,8 @@
-exports.SELECT_USER = "SELECT user, password FROM users WHERE user = ?";
-exports.CREATE_USER = "INSERT INTO users (name, user, password) VALUES (?,?,?) ";
-exports.SELECT_PRODUCT = "SELECT product, name FROM inventario LIMIT ? OFFSET ?";
-exports.UPDATE_PRODUCT = "UPDATE inventario SET name = ?, product = ?";
-exports.DELETE_PRODUCT = "DELETE FROM inventario  WHERE id = ?";
-exports.CREATE_PRODUCT = "INSERT INTO inventario (name, product, ...etc) VALUES (?,?,?)";
-exports.SELECT_SEARCH_PRODUCT = "SELECT product, name FROM inventario WHERE (name LIKE ? OR product LIKE ?) LIMIT ? OFFSET ? "
-exports.COUNT_PRODUCTS = "SELECT COUNT(*) AS Total FROM inventario"
+exports.SELECT_USER = "SELECT nombre, password FROM usuarios WHERE username = ?";
+exports.CREATE_USER = "INSERT INTO usuarios (nombre, username, password, correo) VALUES (?,?,?,?) ";
+exports.SELECT_PRODUCT = "SELECT id, descripcion, precio, stock, creacion, usuario FROM articulos LIMIT ? OFFSET ?";
+exports.UPDATE_PRODUCT = "UPDATE articulos SET descripcion = ?, precio = ?, stock= ?, usuario=?";
+exports.DELETE_PRODUCT = "DELETE FROM articulos  WHERE id = ?";
+exports.CREATE_PRODUCT = "INSERT INTO articulos (descripcion, precio, stock, usuario) VALUES (?,?,?,?)";
+exports.SELECT_SEARCH_PRODUCT = "SELECT id, descripcion, precio, stock,usuario FROM articulos WHERE (id LIKE ?  descripcion LIKE ? ) LIMIT ? OFFSET ? "
+exports.COUNT_PRODUCTS = "SELECT COUNT(*) AS Total FROM articulos"
