@@ -7,10 +7,10 @@ const { CREATE_USER, SELECT_USER } = require('../services/MysqlQueries')
 // procedimiento para registrase
 exports.register =async (req, res)=>{
     try {
-        const {username, password } = req.body
+        const {name, username, email, password } = req.body
         let passHash = await bcryptjs.hash(password, 8)
 
-        conexion.query(CREATE_USER,{username:username,password:passHash},(error,results)=>{
+        conexion.query(CREATE_USER,[name, username, email, passHash, 1],(error,results)=>{
             if(error){
                 console.log(error)
                 return

@@ -1,5 +1,5 @@
 exports.SELECT_USER = "SELECT nombre, password FROM usuarios WHERE username = ?";
-exports.CREATE_USER = "INSERT INTO usuarios (username, password) VALUES (?,?) ";
+exports.CREATE_USER = "INSERT INTO usuarios (nombre, username, correo, password, rol) VALUES (?,?,?,?,?) ";
 exports.SELECT_PRODUCT = "SELECT id, descripcion, precio, stock, creacion, usuario FROM articulos LIMIT ? OFFSET ?";
 exports.UPDATE_PRODUCT = "UPDATE articulos SET descripcion = ?, precio = ?, stock= ?, usuario=?";
 exports.DELETE_PRODUCT = "DELETE FROM articulos  WHERE id = ?";
