@@ -1,16 +1,16 @@
 const jwt = require('jsonwebtoken')
 const bcryptjs = require ('bcryptjs')
-const conexion = require('../database/conexion')
+const { conexion } = require('../database/conexion')
 const {promisify} = require('util')
 const { CREATE_USER, SELECT_USER } = require('../services/MysqlQueries')
 
 // procedimiento para registrase
 exports.register =async (req, res)=>{
     try {
-        const {user, pass } = req.body
-        let passHash = await bcryptjs.hash(pass, 8)
+        const {username, password } = req.body
+        let passHash = await bcryptjs.hash(password, 8)
 
-        conexion.query(CREATE_USER,{user:user,pass:passHash},(error,results)=>{
+        conexion.query(CREATE_USER,{username:username,password:passHash},(error,results)=>{
             if(error){
                 console.log(error)
                 return
@@ -24,12 +24,13 @@ exports.register =async (req, res)=>{
 // procedimiento para iniciar sesión
 exports.login = async (req, res)=>{
     try {
-        const { user, password } = req.body
-        if( !user || !password ){
+        // console.log(req);
+        const { username, password } = req.body
+        if( !username || !password ){
             res.status(405).json({ "status": false, "message": "Ingrese su usuario y contraseña"})
             return
         }
-            conexion.query(SELECT_USER,[user],async (error, results) => {
+            conexion.query(SELECT_USER,[username],async (error, results) => {
                 //en caso de que surga un error
                 if(error) {
                     res.status(405).json(error.message)
