@@ -73,7 +73,7 @@ exports.select_product = (req, res) => {
                 res.status(409).json({ "status": false, "message":"Ocurrió un error al crear el producto"})
                 return
             }
-            res.json({ "status": true, "message": "Producto creado exitosamente", "pageSize": limit, "currentPage": page, "pages": totalPages, "pages": totalPages, "data": results})
+            res.json({ "status": true, "message": "Producto creado exitosamente", "pageSize": limit, "currentPage": page, "pages": totalPages, "data": results})
         })
     })
 }

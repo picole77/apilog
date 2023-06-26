@@ -4,6 +4,7 @@
 module.exports = (app) => {
     const authController  = require('../controllers/AuthController')
     const productController = require('../controllers/ProductController');
+    const salesController = require('../controllers/SalesController')
     
     // router para las vistas
     app.post('/login', authController.login)
@@ -17,5 +18,12 @@ module.exports = (app) => {
     app.delete('/api/articulos/:productId',productController.delete_product)
 
     app.get('/api/articulos', productController.select_product)
+    // rutas para las ventas
+    app.get('/api/ventas', salesController.select_sales)
 
+    app.post('/api/ventas/registrar', salesController.register_sale)
+
+    app.put('/api/ventas/actualizar', salesController.update_sale)
+
+    app.delete('/api/ventas/eliminar', salesController.delete_sale)
 }

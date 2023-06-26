@@ -6,5 +6,5 @@ exports.conexion = mysql.createConnection ({
       user:'root',
       password:'',
       database:'articulosdb',
-      port:'3310'
+      port:'3306'
   });
