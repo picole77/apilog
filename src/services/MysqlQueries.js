@@ -1,5 +1,5 @@
 // USERS
-exports.SELECT_USER = "SELECT nombre, password FROM usuarios WHERE username = ?";
+exports.SELECT_USER = "SELECT id, username, nombre, password FROM usuarios WHERE username = ?";
 exports.CREATE_USER = "INSERT INTO usuarios (nombre, username, correo, password, rol) VALUES (?,?,?,?,?) ";
 // PRODUCTS
 exports.SELECT_PRODUCT = "SELECT id, descripcion, precio, stock, creacion, usuario FROM articulos LIMIT ? OFFSET ?";

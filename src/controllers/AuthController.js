@@ -59,9 +59,13 @@ exports.login = async (req, res)=>{
                         algorithm: 'HS256',
                         expiresIn: process.env.JWT_TIEMPO_EXPIRA
                     })
-
+                    const session = {
+                        "id": results[0].id,
+                        "username": results[0].username,
+                        "name": results[0].nombre
+                    }
                     //envío de la cookie para la creación de la sesión
-                    res.cookie('token', token, { httpOnly: true}).json({ "status": true, "message": "Inicio de sesión" })
+                    res.cookie('token', token, { httpOnly: true}).json({ "status": true, "message": "Inicio de sesión", "session": session})
                 })  
                 
             })
