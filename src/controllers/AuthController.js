@@ -1,36 +1,53 @@
 const jwt = require('jsonwebtoken')
 const bcryptjs = require ('bcryptjs')
 const { conexion } = require('../database/conexion')
-const {promisify} = require('util')
+const { formidable } = require('formidable')
 const { CREATE_USER, SELECT_USER } = require('../services/MysqlQueries')
 
 // procedimiento para registrase
-exports.register =async (req, res)=>{
+exports.register = async (req, res)=>{
     try {
-        const {name, username, email, password } = req.body
-        let passHash = await bcryptjs.hash(password, 8)
+        // receive form data
+        const form = formidable({ multiples: true })
+        // loop fields and file
+        form.parse(req, async (err, fields, files) => {
+            
+            // console.log(fields);
+            
+            const nombre_usuario = fields.nombre_usuario[0]
+            const email = fields.email[0]
+            const password = fields.password[0]
+            const nombre_completo = fields.nombre_completo[0]
+            const numero_telefonico = fields.numero_telefonico[0]
+            const address = fields.address[0]
+            
 
-        conexion.query(CREATE_USER,[name, username, email, passHash, 1],(error,results)=>{
-            if(error){
-                console.log(error)
-                return
-            }
-            res.json({"status": true, "message": "Usuario creado exitosamente"})
+            let passHash = await bcryptjs.hash(password, 8)
+
+            const imagen = fields.filename[0]
+
+            conexion.query(CREATE_USER,[nombre_usuario, email, passHash, nombre_completo, numero_telefonico, address, imagen, 2 ],(error,results)=>{
+                if(error){
+                    console.log(error)
+                    return
+                }
+                res.json({"status": true, "message": "Usuario creado exitosamente"})
+            })
         })
     } catch (error) {
-        console.log("error")
+        console.log("error"+error)
     }
 }
 // procedimiento para iniciar sesión
-exports.login = async (req, res)=>{
+exports.login = async (req, res ) => {
     try {
         // console.log(req);
-        const { username, password } = req.body
-        if( !username || !password ){
+        const { nombre_usuario, password } = req.body
+        if( !nombre_usuario || !password ){
             res.status(405).json({ "status": false, "message": "Ingrese su usuario y contraseña"})
             return
         }
-            conexion.query(SELECT_USER,[username],async (error, results) => {
+            conexion.query(SELECT_USER,[nombre_usuario],async (error, results) => {
                 //en caso de que surga un error
                 if(error) {
                     res.status(405).json(error.message)
