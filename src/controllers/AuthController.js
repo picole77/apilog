@@ -78,8 +78,8 @@ exports.login = async (req, res ) => {
                     })
                     const session = {
                         "id": results[0].id,
-                        "username": results[0].username,
-                        "name": results[0].nombre
+                        "nombre_usuario": results[0].nombre_usuario,
+                        "nombre_completo": results[0].nombre_completo
                     }
                     //envío de la cookie para la creación de la sesión
                     res.cookie('token', token, { httpOnly: true}).json({ "status": true, "message": "Inicio de sesión", "session": session})
