@@ -1,14 +1,14 @@
 const { conexion }  = require('../database/conexion')
-const { CREATE_PRODUCT, UPDATE_PRODUCT, DELETE_PRODUCT,
+const { CREATE_PRODUCT, UPDATE_PRODUCT, DELETE_PRODUCT, SELECT_PRODUCT_ID,
      SELECT_PRODUCT, COUNT_PRODUCTS, SELECT_SEARCH_PRODUCT } = require('../services/MysqlQueries')
 
 exports.create_product = (req, res) => {
     if(!req.body) {
         res.status(401).json({ "status": false, "message": "Ingrese todos los campos obligatorios"})
     }
-    const { descripcion, precio, stock } = req.body
+    const {codigo_barras, nombre, descripcion, precio_compra, precio_venta, stock, imagen} = req.body
     const usuario = 1
-    conexion.query(CREATE_PRODUCT, [descripcion,precio, stock, usuario], (error, results) => {
+    conexion.query(CREATE_PRODUCT, [codigo_barras, nombre, descripcion, precio_compra ,precio_venta, stock, "producto.png"], (error, results) => {
         if(error) {
             res.status(409).json({ "status": false, "message":"Ocurrió un error al crear el producto"})
             return
@@ -22,9 +22,9 @@ exports.update_product = (req, res) => {
         res.status(401).json({ "status": false, "message": "Ingrese todos los campos obligatorios"})
     }
     const id = req.body.id
-    const product = req.body.product
-
-    conexion.query(UPDATE_PRODUCT, [product, id], (error, results) => {
+    const {codigo_barras, nombre, descripcion, precio_compra, precio_venta, stock, imagen} = req.body
+    
+    conexion.query(UPDATE_PRODUCT, [codigo_barras, nombre, descripcion, precio_compra, precio_venta, stock, imagen, id], (error, results) => {
         if(error) {
             res.status(409).json({ "status": false, "message":"Ocurrió un error al actualizar el producto"})
             return
@@ -75,5 +75,21 @@ exports.select_product = (req, res) => {
             }
             res.json({ "status": true, "message": "Producto creado exitosamente", "pageSize": limit, "currentPage": page, "pages": totalPages, "data": results})
         })
+    })
+}
+
+exports.select_product_by_id = (req, res) => {
+    if(!req.body) {
+        res.status(401).json({ "status": false, "message": "Ingrese todos los campos obligatorios"})
+    }
+    
+    const id = req.params.productId
+
+    conexion.query(SELECT_PRODUCT_ID, [id], (error, results) => {
+        if(error) {
+            res.status(409).json({ "status": false, "message":"Ocurrió un error al eliminar el producto"})
+            return
+        }
+        res.json({ "status": true, "data": results})
     })
 }

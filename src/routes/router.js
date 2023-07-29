@@ -18,6 +18,8 @@ module.exports = (app) => {
     app.delete('/api/articulos/:productId',productController.delete_product)
 
     app.get('/api/articulos', productController.select_product)
+
+    app.get('/api/articulos/:productId', productController.select_product_by_id)
     // rutas para las ventas
     app.get('/api/ventas', salesController.select_sales)
 
