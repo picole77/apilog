@@ -34,24 +34,33 @@ exports.update_product = (req, res) => {
 }
 
 exports.delete_product = (req, res) => {
-    if(!req.body) {
+    if(!req.params) {
         res.status(401).json({ "status": false, "message": "Ingrese todos los campos obligatorios"})
     }
-    const id  = req.body.id
+    // req.params.id /articulos/4
+    // req.query.id /articulos?id=4
+    // req.body.id /articulos body: JSON.stringify({id: 4})
+    let id = req.params.productId
+    id = parseInt(id)
+    // console.log(req.params);
     conexion.query(DELETE_PRODUCT, [id], (error, results) => {
         if(error) {
-            res.status(409).json({ "status": false, "message":"Ocurrió un error al eliminar el producto"})
+            res.status(409).json({ "status": false, "message":`Ocurrió un error al eliminar el producto ${error}`})
             return
         }
-        res.json({ "status": true, "message": "Producto eliminado exitosamente"})
+        console.log(results);
+        res.json({ "status": true, "message": `Producto eliminado exitosamente ${results}`})
     })
 }
 
 exports.select_product = (req, res) => {
     //pagination
-    const page = parseInt(req.query.page) ?? 1
-    const limit = parseInt(req.query.limit) ?? 25
+    let page = req.query.page ?? 1
+    let limit = req.query.limit ?? 25
     const search = req.query.search ?? ''
+    // parse elements to int when value is string
+    page = parseInt(page)
+    limit = parseInt(limit)
 
     const QUERY = search === '' ? SELECT_PRODUCT : SELECT_SEARCH_PRODUCT
 
@@ -70,10 +79,10 @@ exports.select_product = (req, res) => {
 
         conexion.query(QUERY, PARAMS, (error, results) => {
             if(error) {
-                res.status(409).json({ "status": false, "message":"Ocurrió un error al crear el producto"})
+                res.status(409).json({ "status": false, "message":`Ocurrió un error al buscar el producto ${error}`})
                 return
             }
-            res.json({ "status": true, "message": "Producto creado exitosamente", "pageSize": limit, "currentPage": page, "pages": totalPages, "data": results})
+            res.json({ "status": true, "message": "Resultados", "pageSize": limit, "currentPage": page, "pages": totalPages, "data": results})
         })
     })
 }

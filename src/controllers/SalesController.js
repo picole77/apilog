@@ -61,13 +61,13 @@ exports.delete_sale = (req, res) => {
  */
 exports.select_sales = (req, res) => {
     try {
-        const PAGE = parseInt(req.query.page) ?? 1
-        const LIMIT = parseInt(req.query.limit) ?? 25
+        const PAGE = req.query.page ?? 1
+        const LIMIT = req.query.limit ?? 25
         const SEARCH = req.query.search ?? ''
 
         const QUERY_OPTION = SEARCH === '' ? SELECT_SALES : SELECT_SEARCH_SALES
 
-        const OFFSET = (PAGE - 1)* LIMIT
+        const OFFSET = (PAGE - 1) * LIMIT
 
         const PARAMS = SEARCH === '' ? [LIMIT, OFFSET] : [ `%${SEARCH}%`, `%${SEARCH}%`, LIMIT, OFFSET]
 
@@ -79,12 +79,12 @@ exports.select_sales = (req, res) => {
             const TOTAL_ROWS = results[0].TOTAL
 
             const TOTAL_PAGES = Math.ceil(TOTAL_ROWS / LIMIT)
-
+            
             conexion.query(QUERY_OPTION, PARAMS, (error, results) => {
                 if(error) {
-                    res.sttus(409).json({"status": false, "message": "Ocurrió un error al realizar la búsqueda"})
+                    return res.status(500).json({"status": false, "message": `Ocurrió un error al realizar la búsqueda ${error}`})
                 }
-                res.json({ "status": true, "message": "Búsqueda realizada correctamente", "pageSize": LIMIT, "currentPage": PAGE, "pages": TOTAL_PAGES, "data": results})
+                res.status(200).json({ "status": true, "message": "Búsqueda realizada correctamente", "pageSize": LIMIT, "currentPage": PAGE, "pages": TOTAL_PAGES, "data": results})
             })
         })
     } catch (error) {
