@@ -20,6 +20,8 @@ module.exports = (app) => {
     app.get('/api/articulos', productController.select_product)
 
     app.get('/api/articulos/:productId', productController.select_product_by_id)
+    // rutas para guardar productos en cocina
+    
     // rutas para las ventas
     app.get('/api/ventas', salesController.select_sales)
 

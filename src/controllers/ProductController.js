@@ -6,11 +6,12 @@ exports.create_product = (req, res) => {
     if(!req.body) {
         res.status(401).json({ "status": false, "message": "Ingrese todos los campos obligatorios"})
     }
-    const {codigo_barras, nombre, descripcion, precio_compra, precio_venta, stock, imagen} = req.body
-    const usuario = 1
-    conexion.query(CREATE_PRODUCT, [codigo_barras, nombre, descripcion, precio_compra ,precio_venta, stock, "producto.png"], (error, results) => {
+    const {codigo_barras, nombre, descripcion, precio_compra, precio_venta, caducidad, stock, imagen} = req.body
+    let caducidadDate = new Date(caducidad)
+    
+    conexion.query(CREATE_PRODUCT, [codigo_barras, nombre, descripcion, precio_compra ,precio_venta, caducidadDate, stock, "producto.png"], (error, results) => {
         if(error) {
-            res.status(409).json({ "status": false, "message":"Ocurrió un error al crear el producto"})
+            res.status(500).json({ "status": false, "message":"Ocurrió un error al crear el producto"})
             return
         }
         res.json({ "status": true, "message": "Producto creado exitosamente"})
@@ -45,11 +46,11 @@ exports.delete_product = (req, res) => {
     // console.log(req.params);
     conexion.query(DELETE_PRODUCT, [id], (error, results) => {
         if(error) {
-            res.status(409).json({ "status": false, "message":`Ocurrió un error al eliminar el producto ${error}`})
+            res.status(409).json({ "status": false, "message":`Ocurrió un error al eliminar el producto`})
             return
         }
-        console.log(results);
-        res.json({ "status": true, "message": `Producto eliminado exitosamente ${results}`})
+        
+        res.json({ "status": true, "message": `Producto eliminado exitosamente`})
     })
 }
 
