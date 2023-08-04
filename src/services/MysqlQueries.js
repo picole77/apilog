@@ -11,6 +11,14 @@ exports.DELETE_PRODUCT = "UPDATE producto SET estatus = 0  WHERE id = ?";
 exports.CREATE_PRODUCT = "INSERT INTO producto (codigo_barras, nombre, descripcion, precio_compra, precio_venta, caducidad, stock, imagen ) VALUES (?,?,?,?,?,?,?,?)";
 exports.SELECT_SEARCH_PRODUCT = "SELECT id, codigo_barras, nombre, descripcion, precio_compra, precio_venta, caducidad, stock, imagen FROM producto WHERE (nombre LIKE ? OR codigo_barras LIKE ? ) AND estatus = 1 LIMIT ? OFFSET ? "
 exports.COUNT_PRODUCTS = "SELECT COUNT(*) AS Total FROM producto WHERE estatus = 1"
+exports.UPDATE_MULTIPLE_PRODUCTS = "UPDATE producto SET precio_compra = ?, stock = ?, modificacion_fecha = ? WHERE id = ?"
+// COCINA
+exports.SELECT_COCINA = "SELECT id, codigo_barras, nombre, precio, stock, estatus, imagen, caducidad, id_articulo FROM cocina WHERE estatus = 1 LIMIT ? OFFSET ?"
+exports.SELECT_SEARCH_COCINA = "SELECT id, codigo_barras, nombre, precio, stock, estatus, imagen, caducidad, id_articulo FROM cocina WHERE estatus = 1 AND (codigo_barras LIKE ? OR nombre LIKE ? ) LIMIT ? OFFSET ?"
+exports.COUNT_COCINA = "SELECT COUNT(*) AS Total FROM cocina WHERE estatus = 1"
+exports.CREATE_COCINA = "INSERT INTO cocina (codigo_barras, nombre, precio, stock, imagen, caducidad, id_articulo) VALUES(?,?,?,?,?,?,?)"
+exports.UPDATE_COCINA = "UPDATE cocina SET codigo_barras = ?, nombre = ?, precio = ?, stock = ?, imagen = ?, caducidad = ?, id_articulo = ? WHERE id = ?"
+exports.DELETE_COCINA = "DELETE FROM cocina WHERE id = ?"
 //SALES
 exports.CREATE_SALE = "INSERT INTO venta (subtotal, descuento, total, id_usuario, client_id, voucher_id) VALUES (?,?,?,?,?,?)"
 exports.SELECT_SALES = "SELECT v.id, v.subtotal, v.descuento, v.total, u.nombre_usuario, c.nombre AS cliente, vch.nombre as voucher, v.fecha FROM venta v INNER JOIN usuarios u ON u.id = v.usuario_id INNER JOIN cliente c ON c.id = v.cliente_id INNER JOIN voucher vch ON vch.id = v.voucher_id LIMIT ? OFFSET ?"

@@ -9,7 +9,7 @@ const session = require('express-session');
 const routes = require('./src/routes/router')
 
 // Implementaciones o inicializaciones
-dotenv.config({path:'.env'});
+dotenv.config();
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 app.use(express.static('public'));

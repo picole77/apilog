@@ -2,18 +2,58 @@ const jwt = require('jsonwebtoken')
 const bcryptjs = require ('bcryptjs')
 const { conexion } = require('../database/conexion')
 const { formidable } = require('formidable')
+const fs = require('fs')
+const path = require('path')
+const { isFileValid } = require('../services/utils')
 const { CREATE_USER, SELECT_USER } = require('../services/MysqlQueries')
 
 // procedimiento para registrase
 exports.register = async (req, res)=>{
     try {
+        // save image in server
+        const uploadPath = path.join(__dirname, 'public', 'images')
         // receive form data
-        const form = formidable({ multiples: true })
+        const form = formidable({
+             multiples: true,
+             maxFieldsSize: 50*1024*1024,
+             uploadDir: uploadPath
+            })
         // loop fields and file
         form.parse(req, async (err, fields, files) => {
             
-            // console.log(fields);
+            if(err) {
+                return res.status(400).json({
+                    status: false,
+                    message: 'Error al procesar la solicitud',
+                    error: err
+                })
+            }
+            // insert single file
+            if(files.myFile.length) {
+            }
+            const file = files.file
+            const isValid = isValidFile(file)
+
+            const fileName = encodeURIComponent(file.name.replace(/\s/g,'-'))
+
+            if(!isValid) {
+                return res.status(400).json({
+                    status: false,
+                    message: 'La imagen no tiene el fomato valido: jpg, png o jpeg'
+                })
+            }
+
+            try {
+                await File.create({
+                    name: `images/${fileName}`
+                })
+
+                console.log("Image save successfully");
+            } catch (error) {
+                    console.log(error);
+            }
             
+
             const nombre_usuario = fields.nombre_usuario[0]
             const email = fields.email[0]
             const password = fields.password[0]
@@ -25,7 +65,7 @@ exports.register = async (req, res)=>{
             let passHash = await bcryptjs.hash(password, 8)
 
             const imagen = fields.filename[0]
-
+            
             conexion.query(CREATE_USER,[nombre_usuario, email, passHash, nombre_completo, numero_telefonico, address, imagen, 2 ],(error,results)=>{
                 if(error){
                     console.log(error)
