@@ -12,8 +12,11 @@ const routes = require('./src/routes/router')
 dotenv.config();
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
-app.use(express.static('public'));
 app.use(cors());
+
+const dirName = require('path').join(__dirname, '/public/')
+
+app.use(express.static(dirName));
 
 app.use(session({
     secret:'secret',
@@ -23,9 +26,9 @@ app.use(session({
 
 routes(app);
 // rutas no validas se redireccionaran a la raíz
-app.get('*', (req, res) => {
-    res.redirect('/')
-})
+// app.get('*', (req, res) => {
+//     res.redirect('/')
+// })
 
 const port = process.env.PORT || 3000;
 

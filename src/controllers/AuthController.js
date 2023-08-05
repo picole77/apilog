@@ -4,14 +4,14 @@ const { conexion } = require('../database/conexion')
 const { formidable } = require('formidable')
 const fs = require('fs')
 const path = require('path')
-const { isFileValid } = require('../services/utils')
+const { isValidFile } = require('../services/utils')
 const { CREATE_USER, SELECT_USER } = require('../services/MysqlQueries')
 
 // procedimiento para registrase
 exports.register = async (req, res)=>{
     try {
         // save image in server
-        const uploadPath = path.join(__dirname, 'public', 'images')
+        const uploadPath = path.join('public', 'images')
         // receive form data
         const form = formidable({
              multiples: true,
@@ -28,13 +28,23 @@ exports.register = async (req, res)=>{
                     error: err
                 })
             }
-            // insert single file
-            if(files.myFile.length) {
-            }
-            const file = files.file
-            const isValid = isValidFile(file)
+            
+            const nombre_usuario = fields.nombre_usuario[0]
+            const email = fields.email[0]
+            const password = fields.password[0]
+            const nombre_completo = fields.nombre_completo[0]
+            const numero_telefonico = fields.numero_telefonico[0]
+            const address = fields.address[0]
 
-            const fileName = encodeURIComponent(file.name.replace(/\s/g,'-'))
+            // insert single file
+            if(files.file.length) {
+            }
+            const file = files.file[0]
+            const isValid = isValidFile(file)
+            const extension = file.mimetype.split('/').pop()
+            const parseFileName = encodeURIComponent(nombre_usuario.replace(/\s/g,'-'))
+            const fileName = `${parseFileName}.${extension}`
+            // console.log(fileName);
 
             if(!isValid) {
                 return res.status(400).json({
@@ -44,27 +54,19 @@ exports.register = async (req, res)=>{
             }
 
             try {
-                await File.create({
-                    name: `images/${fileName}`
-                })
-
-                console.log("Image save successfully");
+                // renames the file in the directory
+                // join file and path directory
+                const joinPath = path.join(uploadPath, fileName)
+                //insert into folder
+                fs.renameSync(file.filepath, joinPath);
             } catch (error) {
-                    console.log(error);
+                console.log(error);
             }
             
-
-            const nombre_usuario = fields.nombre_usuario[0]
-            const email = fields.email[0]
-            const password = fields.password[0]
-            const nombre_completo = fields.nombre_completo[0]
-            const numero_telefonico = fields.numero_telefonico[0]
-            const address = fields.address[0]
-            
-
+            //crypt password
             let passHash = await bcryptjs.hash(password, 8)
 
-            const imagen = fields.filename[0]
+            const imagen = fileName
             
             conexion.query(CREATE_USER,[nombre_usuario, email, passHash, nombre_completo, numero_telefonico, address, imagen, 2 ],(error,results)=>{
                 if(error){
