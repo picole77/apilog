@@ -1,5 +1,5 @@
 // USERS
-exports.SELECT_USER = "SELECT id, nombre_usuario, email, password, nombre_completo, imagen FROM usuarios WHERE nombre_usuario = ? AND estatus = 1";
+exports.SELECT_USER = "SELECT id, nombre_usuario, email, password, nombre_completo, imagen, rol_id FROM usuarios WHERE nombre_usuario = ? AND estatus = 1";
 exports.CREATE_USER = "INSERT INTO usuarios (nombre_usuario, email, password, nombre_completo, numero_telefonico, address, imagen, rol_id) VALUES (?,?,?,?,?,?,?,?) ";
 exports.UPDATE_USER = "UPDATE usuarios SET nombre_usuario = ?, email = ?, password = ?, nombre_completo = ?, imagen = ? WHERE id = ?"
 exports.DELETE_USER = "UPDATE usuarios SET estatus = 0 WHERE id = ?"

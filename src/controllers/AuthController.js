@@ -35,6 +35,7 @@ exports.register = async (req, res)=>{
             const nombre_completo = fields.nombre_completo[0]
             const numero_telefonico = fields.numero_telefonico[0]
             const address = fields.address[0]
+            const rol = fields.rol[0]
 
             // insert single file
             if(files.file.length) {
@@ -68,7 +69,7 @@ exports.register = async (req, res)=>{
 
             const imagen = fileName
             
-            conexion.query(CREATE_USER,[nombre_usuario, email, passHash, nombre_completo, numero_telefonico, address, imagen, 2 ],(error,results)=>{
+            conexion.query(CREATE_USER,[nombre_usuario, email, passHash, nombre_completo, numero_telefonico, address, imagen, rol ],(error,results)=>{
                 if(error){
                     console.log(error)
                     return
@@ -121,7 +122,8 @@ exports.login = async (req, res ) => {
                     const session = {
                         "id": results[0].id,
                         "nombre_usuario": results[0].nombre_usuario,
-                        "nombre_completo": results[0].nombre_completo
+                        "nombre_completo": results[0].nombre_completo,
+                        "rol": results[0].rol_id
                     }
                     //envío de la cookie para la creación de la sesión
                     res.cookie('token', token, { httpOnly: true}).json({ "status": true, "message": "Inicio de sesión", "session": session})

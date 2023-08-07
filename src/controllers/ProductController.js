@@ -8,7 +8,7 @@ const { CREATE_PRODUCT, UPDATE_PRODUCT, DELETE_PRODUCT, SELECT_PRODUCT_ID,
 
 exports.create_product = (req, res) => {
 
-    const uploadDir = path.join(__dirname, 'public', 'products')
+    const uploadDir = path.join('public', 'products')
 
     const form = formidable({ 
         multiples: true,
@@ -24,43 +24,6 @@ exports.create_product = (req, res) => {
                 error: err
             })
         }
-        console.log(files.file[0].mimetype);
-        // insert single file
-        if(files.file.length) {
-        }
-        const file = files.file[0]
-        // const type = file.mimetype
-        const isValid = isValidFile(file)
-
-        const fileName = encodeURIComponent(file.originalFilename.replace(/\s/g,'-'))
-
-        if(!isValid) {
-            return res.status(400).json({
-                status: false,
-                message: 'La imagen no tiene el fomato valido: jpg, png o jpeg'
-            })
-        }
-        try {
-            const exeption = String.raw`\a`
-            console.log(`${uploadDir}${exeption}${fileName}`);
-            // renames the file in the directory
-            fs.renameSync(file.path, `${uploadDir}/${fileName}`);
-        } catch (error) {
-            console.log(error);
-            return res.json({
-                status: false,
-                message: 'Error when try to save image'
-            })
-        }
-        try {
-            const newFile = await new File.create({
-                name: `products/${fileName}`
-            })
-
-            console.log("Image save successfully");
-        } catch (error) {
-                console.log(error);
-        }
 
         //access to filenames
         const codigo_barras = fields.codigo_barras[0]
@@ -70,16 +33,47 @@ exports.create_product = (req, res) => {
         const precio_venta = fields.precio_venta[0]
         const caducidad = fields.caducidad[0]
         const stock = fields.stock[0]
-        const imagen = fileName
+        // console.log(files.file[0].mimetype);
+        // insert single file
+        if(files.file.length) {
+        }
+        const file = files.file[0]
+        // const type = file.mimetype
+        const isValid = isValidFile(file)
+        const extension = file.mimetype.split('/').pop()
+        const parseFileName = encodeURIComponent(nombre.replace(/\s/g,'_'))
+        const imagen = `${parseFileName}.${extension}`
+
+
+        if(!isValid) {
+            return res.status(400).json({
+                status: false,
+                message: 'La imagen no tiene el fomato valido: jpg, png o jpeg'
+            })
+        }
+        try {
+            // renames the file in the directory
+            const joinPath = path.join(uploadDir, imagen)
+            // console.log(file);
+            fs.renameSync(file.filepath, joinPath);
+
+        } catch (error) {
+            // console.log(error);
+            return res.json({
+                status: false,
+                message: 'Ocurrió un error al guardar la imagen'
+            })
+        }
+        
         let caducidadDate = new Date(caducidad)
 
-        // conexion.query(CREATE_PRODUCT, [codigo_barras, nombre, descripcion, precio_compra ,precio_venta, caducidadDate, stock, imagen], (error, results) => {
-        //     if(error) {
-        //         res.status(500).json({ "status": false, "message":"Ocurrió un error al crear el producto"})
-        //         return
-        //     }
-        //     res.json({ "status": true, "message": "Producto creado exitosamente"})
-        // })
+        conexion.query(CREATE_PRODUCT, [codigo_barras, nombre, descripcion, precio_compra ,precio_venta, caducidadDate, stock, imagen], (error, results) => {
+            if(error) {
+                res.status(500).json({ "status": false, "message":"Ocurrió un error al crear el producto"})
+                return
+            }
+            res.json({ "status": true, "message": "Producto creado exitosamente"})
+        })
     })
 }
 
@@ -104,7 +98,7 @@ exports.update_multiple_products = async (req, res) => {
         return res.status(401).json({status: false, message: "Error no insertó ningún producto"})
     }
     const products = req.body
-
+    
     await products.forEach( product => {
         const update_at = new Date(product.fecha)
         const precio_compra = product.precio
@@ -114,10 +108,12 @@ exports.update_multiple_products = async (req, res) => {
         conexion.query(UPDATE_MULTIPLE_PRODUCTS, [precio_compra, stock, update_at, id], (err, results) => {
             if(err) {
                 console.log(err);
+                return res.status(400).json({status: false, message: 'Error al actualizar el producto'})
             }
-            console.log(results);
+            // console.log(results);
         })
     })
+    res.status(201).json({status: true, message: 'Productos actualizados correctamente'})
 }
 
 exports.delete_product = (req, res) => {

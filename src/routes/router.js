@@ -14,9 +14,9 @@ module.exports = (app) => {
     
     app.post('/api/articulos/', productController.create_product)
     
-    app.put('/api/articulos/:productId', productController.update_product)
-
     app.put('/api/articulos/multiple', productController.update_multiple_products)
+    
+    app.put('/api/articulos/:productId', productController.update_product)
     
     app.delete('/api/articulos/:productId',productController.delete_product)
 
@@ -39,4 +39,6 @@ module.exports = (app) => {
     app.put('/api/ventas/actualizar', salesController.update_sale)
 
     app.delete('/api/ventas/eliminar', salesController.delete_sale)
+    // rutas para mostrar los clientes
+    app.get('/api/clientes', clientController.select_all_clients)
 }
