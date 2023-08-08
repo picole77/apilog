@@ -7,10 +7,10 @@ exports.create_cocina_product = (req, res) => {
     if(!req.body) {
         res.status(401).json({ "status": false, "message": "Ingrese todos los campos obligatorios"})
     }
-    const {codigo_barras, nombre, precio, stock, imagen, caducidad, id_articulo} = req.body
+    const {codigo_barras, nombre, precio, stock, imagen, caducidad, id_articulo, id_usuario, id_cliente } = req.body
     let caducidadDate = new Date(caducidad)
     
-    conexion.query(CREATE_COCINA, [codigo_barras, nombre, precio, stock ,'producto.png', caducidadDate, id_articulo], (error, results) => {
+    conexion.query(CREATE_COCINA, [codigo_barras, nombre, precio, stock ,'producto.png', caducidadDate, id_articulo, id_usuario, id_cliente], (error, results) => {
         if(error) {
             res.status(500).json({ "status": false, "message":"Ocurrió un error al crear el producto"})
             return
@@ -24,14 +24,14 @@ exports.update_cocina_product = (req, res) => {
         res.status(401).json({ "status": false, "message": "Ingrese todos los campos obligatorios"})
     }
     const id = req.params.id
-    const {codigo_barras, nombre, descripcion, precio_compra, precio_venta, stock, imagen} = req.body
+    const {codigo_barras, nombre, descripcion, precio_compra, precio_venta, stock, imagen, id_usuario, id_cliente} = req.body
     
-    conexion.query(UPDATE_PRODUCT, [codigo_barras, nombre, descripcion, precio_compra, precio_venta, new Date().getTime(), stock, 'imagen', id], (error, results) => {
+    conexion.query(UPDATE_COCINA, [codigo_barras, nombre, descripcion, precio_compra, precio_venta, new Date().getTime(), stock, 'imagen',id_usuario, id_cliente, id], (error, results) => {
         if(error) {
-            res.status(409).json({ "status": false, "message":"Ocurrió un error al actualizar el producto"+error.message})
+            res.status(401).json({ "status": false, "message":"Ocurrió un error al actualizar el producto"+error.message})
             return
         }
-        res.json({ "status": true, "message": "Producto actualizado exitosamente"})
+        res.status(201).json({ "status": true, "message": "Producto actualizado exitosamente"})
     })
 }
 
@@ -45,10 +45,9 @@ exports.delete_cocina_product = (req, res) => {
     let id = req.params.productId
     id = parseInt(id)
     // console.log(req.params);
-    conexion.query(DELETE_PRODUCT, [id], (error, results) => {
+    conexion.query(DELETE_COCINA, [id], (error, results) => {
         if(error) {
-            res.status(409).json({ "status": false, "message":`Ocurrió un error al eliminar el producto`})
-            return
+            return res.status(409).json({ "status": false, "message":`Ocurrió un error al eliminar el producto`})
         }
         
         res.json({ "status": true, "message": `Producto eliminado exitosamente`})
@@ -64,13 +63,13 @@ exports.select_cocina_product = (req, res) => {
     page = parseInt(page)
     limit = parseInt(limit)
 
-    const QUERY = search === '' ? SELECT_PRODUCT : SELECT_SEARCH_PRODUCT
+    const QUERY = search === '' ? SELECT_COCINA : SELECT_SEARCH_COCINA
 
     const offset = (page - 1) * limit
 
     const PARAMS = search === '' ? [limit, offset] : [ `%${search}%`, `%${search}%`,limit, offset] 
 
-    conexion.query(COUNT_PRODUCTS, (error, results) => {
+    conexion.query(COUNT_COCINA, (error, results) => {
         if(error) {
             console.log(error.message);
             return
@@ -84,7 +83,7 @@ exports.select_cocina_product = (req, res) => {
                 res.status(409).json({ "status": false, "message":`Ocurrió un error al buscar el producto ${error}`})
                 return
             }
-            res.json({ "status": true, "message": "Resultados", "pageSize": limit, "currentPage": page, "pages": totalPages, "data": results})
+            res.status(200).json({ "status": true, "message": "Resultados", "pageSize": limit, "currentPage": page, "pages": totalPages, "data": results})
         })
     })
 }
