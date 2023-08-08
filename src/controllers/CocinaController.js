@@ -7,16 +7,22 @@ exports.create_cocina_product = (req, res) => {
     if(!req.body) {
         res.status(401).json({ "status": false, "message": "Ingrese todos los campos obligatorios"})
     }
-    const {codigo_barras, nombre, precio, stock, imagen, caducidad, id_articulo, id_usuario, id_cliente } = req.body
-    let caducidadDate = new Date(caducidad)
+    let productos = []
     
-    conexion.query(CREATE_COCINA, [codigo_barras, nombre, precio, stock ,'producto.png', caducidadDate, id_articulo, id_usuario, id_cliente], (error, results) => {
-        if(error) {
-            res.status(500).json({ "status": false, "message":"Ocurrió un error al crear el producto"})
-            return
-        }
-        res.json({ "status": true, "message": "Producto creado exitosamente"})
+    productos = req.body
+    
+    productos.forEach( product => {
+        const caducidadDate = new Date(product.caducidad)
+
+        conexion.query(CREATE_COCINA, [product.codigo_barras, product.nombre, product.precio, product.stock , product.imagen, caducidadDate, product.id_articulo, product.id_usuario, product.id_cliente], (error, results) => {
+            if(error) {
+                res.status(500).json({ "status": false, "message":"Ocurrió un error al crear el producto"})
+                return
+            }
+        })
     })
+    res.json({ "status": true, "message": "Productos creados exitosamente"})
+
 }
 
 exports.update_cocina_product = (req, res) => {
