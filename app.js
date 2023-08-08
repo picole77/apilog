@@ -14,7 +14,7 @@ app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 app.use(cors());
 
-const dirName = require('path').join(__dirname, '/public/')
+const dirName = require('path').join('public/')
 
 app.use(express.static(dirName));
 
@@ -26,9 +26,9 @@ app.use(session({
 
 routes(app);
 // rutas no validas se redireccionaran a la raíz
-// app.get('*', (req, res) => {
-//     res.redirect('/')
-// })
+app.get('*', (req, res) => {
+    res.redirect('/')
+})
 
 const port = process.env.PORT || 3000;
 
