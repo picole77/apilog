@@ -1,5 +1,6 @@
 const { conexion } = require('../database/conexion')
-const { CREATE_SALE, SELECT_SALES, SELECT_SEARCH_SALES, UPDATE_SALE, DELETE_SALE, COUNT_SALES } = require('../services/MysqlQueries')
+const { CREATE_SALE, SELECT_SALES, SELECT_SEARCH_SALES, 
+    UPDATE_SALE, DELETE_SALE, COUNT_SALES, SEARCH_SALE, SEARCH_SALE_DATES } = require('../services/MysqlQueries')
 
 /**
  * Procedimiento para registrar las ventas
@@ -55,6 +56,39 @@ exports.delete_sale = (req, res) => {
     } catch (error) {
         console.log(error);
     }
+}
+/**
+ * Search sale by id and return array json result
+ * @param {*} req 
+ * @param {*} res 
+ */
+exports.select_sale = (req, res) => {
+    
+    const id = req.params.id
+
+    conexion.query(SEARCH_SALE, [id], (error, results) => {
+        if(error) 
+            return res.status(500).json({status: false, message: 'Ocurrió un error al buscar la venta'})
+
+        res.status(200).json({ status: true, data: results })
+    })
+}
+/**
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ */
+exports.select_sales_dates = (req, res) => {
+    let { first_date, second_date } = req.query
+    
+    conexion.query(SEARCH_SALE_DATES, [first_date, second_date], (error, results) => {
+        if(error) {
+            console.log(error);
+            return res.status(401).json({status: false, message: 'Ocurrió un error al buscar las ventas en las fechas seleccionadas'})
+        }
+
+        res.status(200).json({status: true, data: results})
+    })
 }
 /**
  * Lista de todas las ventas registradas hasta el momento

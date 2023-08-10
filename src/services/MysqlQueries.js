@@ -5,10 +5,11 @@ exports.UPDATE_USER = "UPDATE usuarios SET nombre_usuario = ?, email = ?, passwo
 exports.DELETE_USER = "UPDATE usuarios SET estatus = 0 WHERE id = ?"
 // PRODUCTS
 exports.SELECT_PRODUCT = "SELECT id, codigo_barras, nombre, descripcion, precio_compra, precio_venta, caducidad, stock, imagen FROM producto WHERE estatus = 1 LIMIT ? OFFSET ?";
-exports.SELECT_PRODUCT_ID = "SELECT id, codigo_barras, nombre, descripcion, precio_compra, precio_venta, caducidad, stock, imagen FROM producto WHERE id = ? AND estatus = 1"
+exports.SELECT_PRODUCT_ID = "SELECT id, codigo_barras, nombre, descripcion, precio_compra, precio_venta, caducidad, stock, imagen, creacion_fecha FROM producto WHERE id = ? AND estatus = 1"
+exports.SELECT_PRODUCT_DATES = "SELECT id, codigo_barras, nombre, descripcion, creacion_fecha AS fecha, stock FROM producto WHERE DATE_FORMAT(creacion_fecha, '%Y-%m-%d') BETWEEN ? AND ? "
 exports.UPDATE_PRODUCT = "UPDATE producto SET codigo_barras = ?, nombre = ?, descripcion = ?, precio_compra = ?, precio_venta = ?, caducidad = ?, stock = ?, imagen = ?, modificacion_fecha = NOW() WHERE id = ?";
 exports.DELETE_PRODUCT = "UPDATE producto SET estatus = 0  WHERE id = ?";
-exports.CREATE_PRODUCT = "INSERT INTO producto (codigo_barras, nombre, descripcion, precio_compra, precio_venta, caducidad, stock, imagen ) VALUES (?,?,?,?,?,?,?,?)";
+exports.CREATE_PRODUCT = "INSERT INTO producto (codigo_barras, nombre, descripcion, precio_compra, precio_venta, caducidad, stock, imagen, creacion_fecha ) VALUES (?,?,?,?,?,?,?,?, NOW())";
 exports.SELECT_SEARCH_PRODUCT = "SELECT id, codigo_barras, nombre, descripcion, precio_compra, precio_venta, caducidad, stock, imagen FROM producto WHERE (nombre LIKE ? OR codigo_barras LIKE ? ) AND estatus = 1 LIMIT ? OFFSET ? "
 exports.COUNT_PRODUCTS = "SELECT COUNT(*) AS Total FROM producto WHERE estatus = 1"
 exports.UPDATE_MULTIPLE_PRODUCTS = "UPDATE producto SET precio_compra = ?, stock = ?, modificacion_fecha = ? WHERE id = ?"
@@ -20,9 +21,11 @@ exports.CREATE_COCINA = "INSERT INTO cocina (codigo_barras, nombre, precio, stoc
 exports.UPDATE_COCINA = "UPDATE cocina SET codigo_barras = ?, nombre = ?, precio = ?, stock = ?, imagen = ?, caducidad = ?, id_articulo = ?, id_usuario = ?, id_cliente = ? WHERE id = ?"
 exports.DELETE_COCINA = "DELETE FROM cocina WHERE id = ?"
 //SALES
-exports.CREATE_SALE = "INSERT INTO venta (subtotal, descuento, total, id_usuario, client_id, voucher_id) VALUES (?,?,?,?,?,?)"
-exports.SELECT_SALES = "SELECT v.id, v.subtotal, v.descuento, v.total, u.nombre_usuario, c.nombre AS cliente, vch.nombre as voucher, v.fecha FROM venta v INNER JOIN usuarios u ON u.id = v.usuario_id INNER JOIN cliente c ON c.id = v.cliente_id INNER JOIN voucher vch ON vch.id = v.voucher_id LIMIT ? OFFSET ?"
-exports.SELECT_SEARCH_SALES = "SELECT v.id, v.subtotal, v.descuento, v.total, u.nombre_usuario, c.nombre AS cliente, vch.nombre as voucher, v.fecha FROM venta v INNER JOIN usuarios u ON u.id = v.usuario_id INNER JOIN cliente c ON c.id = v.cliente_id INNER JOIN voucher vch ON vch.id = v.voucher_id WHERE (v.id LIKE ? OR c.nombre LIKE ?)  LIMIT ? OFFSET ?"
+exports.CREATE_SALE = "INSERT INTO venta (subtotal, descuento, total, id_usuario, client_id, voucher_id, tipo_cliente) VALUES (?,?,?,?,?,?,?)"
+exports.SELECT_SALES = "SELECT v.id, v.subtotal, v.descuento, v.total, u.nombre_usuario, c.nombre AS cliente, vch.nombre as voucher, v.fecha, v.tipo_cliente FROM venta v INNER JOIN usuarios u ON u.id = v.usuario_id INNER JOIN cliente c ON c.id = v.cliente_id INNER JOIN voucher vch ON vch.id = v.voucher_id LIMIT ? OFFSET ?"
+exports.SELECT_SEARCH_SALES = "SELECT v.id, v.subtotal, v.descuento, v.total, u.nombre_usuario, c.nombre AS cliente, vch.nombre as voucher, v.fecha, v.tipo_cliente FROM venta v INNER JOIN usuarios u ON u.id = v.usuario_id INNER JOIN cliente c ON c.id = v.cliente_id INNER JOIN voucher vch ON vch.id = v.voucher_id WHERE (v.id LIKE ? OR c.nombre LIKE ?)  LIMIT ? OFFSET ?"
+exports.SEARCH_SALE_DATES = "SELECT v.id, v.subtotal, v.descuento, v.total, u.nombre_usuario, c.nombre AS cliente, vch.nombre as voucher, v.fecha, v.tipo_cliente FROM venta v INNER JOIN usuarios u ON u.id = v.usuario_id INNER JOIN cliente c ON c.id = v.cliente_id INNER JOIN voucher vch ON vch.id = v.voucher_id WHERE DATE_FORMAT(v.fecha, '%Y-%m-%d') BETWEEN ? AND ?"
+exports.SEARCH_SALE = "SELECT v.id, v.subtotal, v.descuento, v.total, u.nombre_usuario, c.nombre AS cliente, vch.nombre as voucher, v.fecha, v.tipo_cliente FROM venta v INNER JOIN usuarios u ON u.id = v.usuario_id INNER JOIN cliente c ON c.id = v.cliente_id INNER JOIN voucher vch ON vch.id = v.voucher_id WHERE v.id = ?"
 exports.COUNT_SALES = "SELECT COUNT(*) AS TOTAL FROM venta"
 exports.UPDATE_SALE = "UPDATE venta SET subtotal = ?, descuento = ?, total = ?, id_usuario = ?, client_id = ?, voucher_id = ? WHERE id = ?"
 exports.DELETE_SALE = "DELETE FROM venta WHERE id = ?"

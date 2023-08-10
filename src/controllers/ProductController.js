@@ -3,7 +3,8 @@ const path = require('path')
 const { conexion }  = require('../database/conexion')
 const fs = require('fs')
 const { isValidFile }  = require('../services/utils')
-const { CREATE_PRODUCT, UPDATE_PRODUCT, DELETE_PRODUCT, SELECT_PRODUCT_ID,
+
+const { CREATE_PRODUCT, UPDATE_PRODUCT, DELETE_PRODUCT, SELECT_PRODUCT_ID, SELECT_PRODUCT_DATES,
      SELECT_PRODUCT, COUNT_PRODUCTS, SELECT_SEARCH_PRODUCT, UPDATE_MULTIPLE_PRODUCTS } = require('../services/MysqlQueries')
 
 exports.create_product = (req, res) => {
@@ -183,5 +184,17 @@ exports.select_product_by_id = (req, res) => {
             return
         }
         res.json({ "status": true, "data": results})
+    })
+}
+
+exports.select_product_dates = (req, res) => {
+    const { first_date, second_date } = req.query
+    console.log(req.query);
+    conexion.query(SELECT_PRODUCT_DATES, [first_date, second_date], (error, results) => {
+        if(error) {
+            console.log(error);
+            res.status(401).json({status:false, message: 'Ocurrió un error al obtener los productos'})
+        }
+        res.status(200).json({status: true, data: results })
     })
 }

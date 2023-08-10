@@ -7,6 +7,7 @@ module.exports = (app) => {
     const salesController = require('../controllers/SalesController')
     const cocinaController = require('../controllers/CocinaController')
     const clientController = require('../controllers/ClientController')
+    const pdfController = require('../controllers/PDFController')
     // router para las vistas
     app.post('/login', authController.login)
 
@@ -20,9 +21,12 @@ module.exports = (app) => {
     
     app.delete('/api/articulos/:productId',productController.delete_product)
 
+    app.post('/api/articulos/dates', productController.select_product_dates)
+    
     app.get('/api/articulos', productController.select_product)
 
-    app.get('/api/articulos/:productId', productController.select_product_by_id)
+    app.post('/api/articulos/:productId', productController.select_product_by_id)
+
     // rutas para guardar productos en cocina
     app.post('/api/cocina/registrar', cocinaController.create_cocina_product)
     
@@ -34,6 +38,10 @@ module.exports = (app) => {
     // rutas para las ventas
     app.get('/api/ventas', salesController.select_sales)
 
+    app.get('/api/ventas/:id', salesController.select_sale)
+
+    app.post('/api/ventas/dates', salesController.select_sales_dates)
+
     app.post('/api/ventas/registrar', salesController.register_sale)
 
     app.put('/api/ventas/actualizar', salesController.update_sale)
@@ -41,4 +49,8 @@ module.exports = (app) => {
     app.delete('/api/ventas/eliminar', salesController.delete_sale)
     // rutas para mostrar los clientes
     app.get('/api/clientes', clientController.select_all_clients)
+    // rutas para mostrar los pdfs
+    app.get('/api/pdf/venta/:id', pdfController.pdf_ventas)
+
+    app.get('/api/pdf/almacen/:id', pdfController.pdf_almacen)
 }
