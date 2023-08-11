@@ -1,6 +1,6 @@
 const fs = require('fs')
 const { conexion }  = require('../database/conexion')
-const { CREATE_COCINA, UPDATE_COCINA, DELETE_COCINA,
+const { CREATE_COCINA, UPDATE_COCINA, DELETE_COCINA, SELECT_COCINA_DATES,
      SELECT_COCINA, COUNT_COCINA, SELECT_SEARCH_COCINA } = require('../services/MysqlQueries')
 
 exports.create_cocina_product = (req, res) => {
@@ -107,5 +107,16 @@ exports.select_cocina_product_by_id = (req, res) => {
             return
         }
         res.json({ "status": true, "data": results})
+    })
+}
+exports.select_cocina_dates = (req, res) => {
+    const { first_date, second_date } = req.query
+    console.log(req.query);
+    conexion.query(SELECT_COCINA_DATES, [first_date, second_date], (error, results) => {
+        if(error) {
+            console.log(error);
+            res.status(401).json({status:false, message: 'Ocurrió un error al obtener los productos'})
+        }
+        res.status(200).json({status: true, data: results })
     })
 }

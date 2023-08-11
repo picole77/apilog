@@ -34,23 +34,25 @@ module.exports = (app) => {
 
     app.delete('/api/cocina/:id', cocinaController.delete_cocina_product)
 
+    app.post('/api/cocina/dates', cocinaController.select_cocina_dates)
+
     app.get('/api/cocina', cocinaController.select_cocina_product)
     // rutas para las ventas
     app.get('/api/ventas', salesController.select_sales)
 
     app.get('/api/ventas/:id', salesController.select_sale)
-
+    
     app.post('/api/ventas/dates', salesController.select_sales_dates)
-
+    
     app.post('/api/ventas/registrar', salesController.register_sale)
-
+    
     app.put('/api/ventas/actualizar', salesController.update_sale)
-
+    
     app.delete('/api/ventas/eliminar', salesController.delete_sale)
     // rutas para mostrar los clientes
     app.get('/api/clientes', clientController.select_all_clients)
     // rutas para mostrar los pdfs
     app.get('/api/pdf/venta/:id', pdfController.pdf_ventas)
-
+    
     app.get('/api/pdf/almacen/:id', pdfController.pdf_almacen)
 }

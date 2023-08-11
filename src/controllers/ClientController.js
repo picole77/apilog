@@ -38,6 +38,7 @@ exports.select_all_clients = (req, res) => {
 
         conexion.query(QUERY, PARAMS, (error, results) => {
             if(error) {
+                console.log(error);
                 return res.status(400).json({status: false, message: 'Error al obtener la lista de clientes'})
             }
             res.status(200).json({status: true, message: 'Resultados', pageSize: limit, currentPage: page, pages: totalPages, data: results })

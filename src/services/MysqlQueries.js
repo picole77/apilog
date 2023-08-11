@@ -14,8 +14,10 @@ exports.SELECT_SEARCH_PRODUCT = "SELECT id, codigo_barras, nombre, descripcion, 
 exports.COUNT_PRODUCTS = "SELECT COUNT(*) AS Total FROM producto WHERE estatus = 1"
 exports.UPDATE_MULTIPLE_PRODUCTS = "UPDATE producto SET precio_compra = ?, stock = ?, modificacion_fecha = ? WHERE id = ?"
 // COCINA
-exports.SELECT_COCINA = "SELECT c.id, c.codigo_barras, c.nombre, c.precio, c.stock, c.estatus, c.imagen, c.caducidad, p.nombre as producto, u.nombre_usuario as usuario, cl.nombre as cliente FROM cocina c INNER JOIN cliente cl ON cl.id = c.id_cliente INNER JOIN usuarios u ON u.id = c.id_usuario INNER JOIN producto p ON p.id = c.id_articulo WHERE c.estatus = 1 LIMIT ? OFFSET ?"
-exports.SELECT_SEARCH_COCINA = "SELECT c.id, c.codigo_barras, c.nombre, c.precio, c.stock, c.estatus, c.imagen, c.caducidad, p.nombre as producto, u.nombre_usuario as usuario, cl.nombre as cliente FROM cocina c INNER JOIN cliente cl ON cl.id = c.id_cliente INNER JOIN usuarios u ON u.id = c.id_usuario INNER JOIN producto p ON p.id = c.id_articulo WHERE c.estatus = 1 AND (c.codigo_barras LIKE ? OR c.nombre LIKE ? ) LIMIT ? OFFSET ?"
+exports.SELECT_COCINA = "SELECT c.id, c.codigo_barras, c.nombre, c.created_at, c.precio, c.stock, c.estatus, c.imagen, c.caducidad, p.nombre as producto, u.nombre_usuario as usuario, cl.nombre as cliente FROM cocina c INNER JOIN cliente cl ON cl.id = c.id_cliente INNER JOIN usuarios u ON u.id = c.id_usuario INNER JOIN producto p ON p.id = c.id_articulo WHERE c.estatus = 1 LIMIT ? OFFSET ?"
+exports.SELECT_SEARCH_COCINA = "SELECT c.id, c.codigo_barras, c.nombre, c.created_at,c.precio, c.stock, c.estatus, c.imagen, c.caducidad, p.nombre as producto, u.nombre_usuario as usuario, cl.nombre as cliente FROM cocina c INNER JOIN cliente cl ON cl.id = c.id_cliente INNER JOIN usuarios u ON u.id = c.id_usuario INNER JOIN producto p ON p.id = c.id_articulo WHERE c.estatus = 1 AND (c.codigo_barras LIKE ? OR c.nombre LIKE ? ) LIMIT ? OFFSET ?"
+exports.SELECT_COCINA_DATES = "SELECT c.id, c.codigo_barras, c.nombre, c.created_at, c.precio, c.stock, c.estatus, c.imagen, c.caducidad, p.nombre as producto, u.nombre_usuario as usuario, cl.nombre as cliente FROM cocina c INNER JOIN cliente cl ON cl.id = c.id_cliente INNER JOIN usuarios u ON u.id = c.id_usuario INNER JOIN producto p ON p.id = c.id_articulo WHERE c.estatus = 1 AND DATE_FORMAT(c.created_at, '%Y-%m-%d') BETWEEN ? AND ?"
+exports.SELECT_COCINA_ID = "SELECT c.id, c.codigo_barras, c.nombre, c.created_at, c.precio, c.stock, c.estatus, c.imagen, c.caducidad, p.nombre as producto, u.nombre_usuario as usuario, cl.nombre as cliente FROM cocina c INNER JOIN cliente cl ON cl.id = c.id_cliente INNER JOIN usuarios u ON u.id = c.id_usuario INNER JOIN producto p ON p.id = c.id_articulo WHERE c.estatus = 1 AND c.id = ?"
 exports.COUNT_COCINA = "SELECT COUNT(*) AS Total FROM cocina WHERE estatus = 1"
 exports.CREATE_COCINA = "INSERT INTO cocina (codigo_barras, nombre, precio, stock, imagen, caducidad, id_articulo, id_usuario, id_cliente) VALUES(?,?,?,?,?,?,?,?,?)"
 exports.UPDATE_COCINA = "UPDATE cocina SET codigo_barras = ?, nombre = ?, precio = ?, stock = ?, imagen = ?, caducidad = ?, id_articulo = ?, id_usuario = ?, id_cliente = ? WHERE id = ?"
@@ -35,11 +37,11 @@ exports.SELECT_SALE_DETAILS = "SELECT v.id, v.subtotal, v.impuesto_generado_vent
 exports.UPDATE_SALE_DETAILS = "UPDATE detalle_ventas SET venta_id = ?, producto_id = ?, cantidad = ?, amount = ? WHERE venta_id = ? "
 exports.DELETE_SALE_DETAILS = "DELETE FROM detalle_ventas WHERE venta_id = ?"
 // CLIENTS
-exports.CREATE_CLIENT = "INSERT INTO cliente (nombre, tipo_documento, num_documento, direccion, numero_tel, email) VALUES (?,?,?,?,?,?)"
-exports.SELECT_ALL_CLIENTS = "SELECT id, nombre, tipo_documento, num_documento, direccion, numero_tel, email, fecha_creacion, fecha_modificacion FROM cliente WHERE estatus = 1 LIMIT ? OFFSET ?"
+exports.CREATE_CLIENT = "INSERT INTO cliente (nombre, tipo_cliente, direccion, numero_tel, email) VALUES (?,?,?,?,?,?)"
+exports.SELECT_ALL_CLIENTS = "SELECT id, nombre, tipo_cliente, direccion, numero_tel, email, fecha_creacion, fecha_modificacion FROM cliente WHERE estatus = 1 LIMIT ? OFFSET ?"
 exports.COUNT_ALL_CLIENTS = "SELECT COUNT(*) AS TOTAL FROM cliente WHERE estatus = 1"
-exports.SELECT_CLIENT = "SELECT id, nombre, tipo_documento, num_documento, direccion, numero_tel, email FROM cliente WHERE id = ? AND estatus = 1"
-exports.UPDATE_CLIENT = "UPDATE cliente SET nombre = ?, tipo_documento = ?, num_documento = ?, direccion = ?, numero_tel = ?, email = ? WHERE id = ?"
+exports.SELECT_CLIENT = "SELECT id, nombre, tipo_cliente, direccion, numero_tel, email FROM cliente WHERE id = ? AND estatus = 1"
+exports.UPDATE_CLIENT = "UPDATE cliente SET nombre = ?, tipo_cliente = ?, direccion = ?, numero_tel = ?, email = ? WHERE id = ?"
 exports.DELETE_CLIENT = "UPDATE cliente SET estatus = 0 WHERE id = ?"
 // VOUCHER
 exports.CREATE_VOUCHER = "INSERT INTO voucher (nombre, igv) VALUES(?,?)"
