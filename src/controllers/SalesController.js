@@ -1,5 +1,5 @@
 const { conexion } = require('../database/conexion')
-const { CREATE_SALE, SELECT_SALES, SELECT_SEARCH_SALES, 
+const { CREATE_SALE, SELECT_SALES, SELECT_SEARCH_SALES, CREATE_SALE_DETAILS,
     UPDATE_SALE, DELETE_SALE, COUNT_SALES, SEARCH_SALE, SEARCH_SALE_DATES } = require('../services/MysqlQueries')
 
 /**
@@ -7,12 +7,24 @@ const { CREATE_SALE, SELECT_SALES, SELECT_SEARCH_SALES,
  */
 exports.register_sale = async (req, res) => {
     try {
-        // const {cantidad, descripcion, precio, id_producto, fecha, hora, id_usuario} = req.body
-        const salesArray = req.body
-        conexion.query(CREATE_SALE, salesArray, (error, results) => {
+        const { total, usuario_id, client_id, tipo_venta, tipo_cliente, productos} = req.body
+        const descuento = 0;
+        
+        conexion.query(CREATE_SALE, [descuento, total, usuario_id, client_id, tipo_venta, tipo_cliente], (error, results) => {
             if(error){
-                throw new Error(error)
-                return
+                console.log(error);
+                return res.status(500).json({status: false, message: 'Ah ocurrido un error al generar la venta'})
+            }
+            const last_id = results.insertId
+            if(productos.length > 0) {
+                productos.forEach( product => {
+                    conexion.query(CREATE_SALE_DETAILS, [last_id, product.product_id, product.cantidad, product.amount], (error, results) => {
+                        if(error) {
+                            console.log(error);
+                            return res.status(500).json({status: false, message: 'Ah ocurrido un error al registrar los productos de la venta'})
+                        }
+                    })
+                })
             }
             res.json({"status": true, "message": "La venta se ha registrado correctamente"})
         })

@@ -8,6 +8,7 @@ module.exports = (app) => {
     const cocinaController = require('../controllers/CocinaController')
     const clientController = require('../controllers/ClientController')
     const pdfController = require('../controllers/PDFController')
+    const productosCocinaController = require('../controllers/ProductCocinaController')
     // router para las vistas
     app.post('/login', authController.login)
 
@@ -26,7 +27,8 @@ module.exports = (app) => {
     app.get('/api/articulos', productController.select_product)
 
     app.post('/api/articulos/:productId', productController.select_product_by_id)
-
+    // productos cocina
+    app.get('/api/articulos/cocina', productosCocinaController.select_product_cocina)
     // rutas para guardar productos en cocina
     app.post('/api/cocina/registrar', cocinaController.create_cocina_product)
     
