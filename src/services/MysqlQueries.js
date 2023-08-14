@@ -1,5 +1,6 @@
 // USERS
 exports.SELECT_USER = "SELECT id, nombre_usuario, email, password, nombre_completo, imagen, rol_id FROM usuarios WHERE nombre_usuario = ? AND estatus = 1";
+exports.SELECT_ALL_USERS = "SELECT id, nombre_usuario, email, password, nombre_completo, imagen, rol_id, estatus FROM usuarios"
 exports.CREATE_USER = "INSERT INTO usuarios (nombre_usuario, email, password, nombre_completo, numero_telefonico, address, imagen, rol_id) VALUES (?,?,?,?,?,?,?,?) ";
 exports.UPDATE_USER = "UPDATE usuarios SET nombre_usuario = ?, email = ?, password = ?, nombre_completo = ?, imagen = ? WHERE id = ?"
 exports.DELETE_USER = "UPDATE usuarios SET estatus = 0 WHERE id = ?"
@@ -14,7 +15,7 @@ exports.SELECT_SEARCH_PRODUCT = "SELECT id, codigo_barras, nombre, descripcion, 
 exports.COUNT_PRODUCTS = "SELECT COUNT(*) AS Total FROM producto WHERE estatus = 1"
 exports.UPDATE_MULTIPLE_PRODUCTS = "UPDATE producto SET precio_compra = ?, stock = ?, modificacion_fecha = ? WHERE id = ?"
 // PRODUCTS COCINA
-exports.SELECT_PRODUCT_COCINA = "SELECT id, nombre, descripcion, precio FROM producto_cocina"
+exports.SELECT_PRODUCT_COCINA = "SELECT id, nombre, descripcion, precio, created_at FROM producto_cocina"
 exports.CREATE_PRODUCT_COCINA = "INSERT INTO producto_cocina (nombre, descripcion, precio, created_at) VALUES (?,?,?,NOW())"
 exports.UPDATE_PRODUCT_COCINA = "UPDATE producto_cocina SET nombre = ?, descripcion = ?, precio = ? , updated_at = NOW() WHERE id = ?"
 exports.DELETE_PRODUCT_COCINA = "DELETE FROM producto_cocina WHERE id = ?"
@@ -76,3 +77,8 @@ exports.CREATE_CATEGORY = "INSERT INTO categoria (nombre, descripcion) VALUES(?,
 exports.SELECT_CATEGORY = "SELECT nombre, descripcion FROM categoria LIMIT ? OFFSET ?"
 exports.UPDATE_CATEGORY = "UPDATE categoria SET nombre = ?, descripcion = ?, fecha_modificacion = NOW() WHERE id = ?"
 exports.DELETE_CATEGORY = "UPDATE categoria SET estatus = 0 WHERE id = ?"
+// ROLES
+exports.CREATE_ROL = "INSERT INTO rol (tipo_usuario) VALUES(?)"
+exports.SELECT_ROL = "SELECT id, tipo_usuario FROM rol"
+exports.DELETE_ROL = "DELETE FROM rol WHERE id = ?"
+exports.UPDATE_ROL = "UPDATE rol SET tipo_usuario = ? WHERE id = ?"

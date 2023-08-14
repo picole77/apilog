@@ -3,6 +3,7 @@
 
 module.exports = (app) => {
     const authController  = require('../controllers/AuthController')
+    const userController = require('../controllers/UserController')
     const productController = require('../controllers/ProductController');
     const salesController = require('../controllers/SalesController')
     const cocinaController = require('../controllers/CocinaController')
@@ -13,7 +14,10 @@ module.exports = (app) => {
     app.post('/login', authController.login)
 
     app.post('/register', authController.register)
-    
+    // usuarios
+
+    app.get('/api/usuarios', userController.select_all_users)
+
     app.post('/api/articulos/', productController.create_product)
     
     app.put('/api/articulos/multiple', productController.update_multiple_products)
@@ -31,6 +35,8 @@ module.exports = (app) => {
     app.get('/api/articulos/cocina', productosCocinaController.select_product_cocina)
 
     app.post('/api/articulos/cocina/crear', productosCocinaController.create_product_cocina)
+
+    app.delete('/api/articulos/cocina/eliminar', productosCocinaController.delete_product_cocina)
     // rutas para guardar productos en cocina
     app.post('/api/cocina/registrar', cocinaController.create_cocina_product)
     
