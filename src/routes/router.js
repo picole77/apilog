@@ -29,6 +29,8 @@ module.exports = (app) => {
     app.post('/api/articulos/:productId', productController.select_product_by_id)
     // productos cocina
     app.get('/api/articulos/cocina', productosCocinaController.select_product_cocina)
+
+    app.post('/api/articulos/cocina/crear', productosCocinaController.create_product_cocina)
     // rutas para guardar productos en cocina
     app.post('/api/cocina/registrar', cocinaController.create_cocina_product)
     
@@ -42,11 +44,11 @@ module.exports = (app) => {
     // rutas para las ventas
     app.get('/api/ventas', salesController.select_sales)
 
+    app.post('/api/ventas/registrar', salesController.register_sale)
+    
     app.get('/api/ventas/:id', salesController.select_sale)
     
     app.post('/api/ventas/dates', salesController.select_sales_dates)
-    
-    app.post('/api/ventas/registrar', salesController.register_sale)
     
     app.put('/api/ventas/actualizar', salesController.update_sale)
     
