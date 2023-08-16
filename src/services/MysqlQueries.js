@@ -7,7 +7,7 @@ exports.DELETE_USER = "UPDATE usuarios SET estatus = 0 WHERE id = ?"
 // PRODUCTS
 exports.SELECT_PRODUCT = "SELECT id, codigo_barras, nombre, descripcion, precio_compra, precio_venta, caducidad, stock, imagen FROM producto WHERE estatus = 1 LIMIT ? OFFSET ?";
 exports.SELECT_PRODUCT_ID = "SELECT id, codigo_barras, nombre, descripcion, precio_compra, precio_venta, caducidad, stock, imagen, creacion_fecha FROM producto WHERE id = ? AND estatus = 1"
-exports.SELECT_PRODUCT_DATES = "SELECT id, codigo_barras, nombre, descripcion, creacion_fecha AS fecha, stock FROM producto WHERE DATE_FORMAT(creacion_fecha, '%Y-%m-%d') BETWEEN ? AND ? "
+exports.SELECT_PRODUCT_DATES = "SELECT id, codigo_barras, nombre, descripcion, creacion_fecha AS fecha, stock FROM producto WHERE estatus = 1 AND DATE_FORMAT(creacion_fecha, '%Y-%m-%d') BETWEEN ? AND ? "
 exports.UPDATE_PRODUCT = "UPDATE producto SET codigo_barras = ?, nombre = ?, descripcion = ?, precio_compra = ?, precio_venta = ?, caducidad = ?, stock = ?, imagen = ?, modificacion_fecha = NOW() WHERE id = ?";
 exports.DELETE_PRODUCT = "UPDATE producto SET estatus = 0  WHERE id = ?";
 exports.CREATE_PRODUCT = "INSERT INTO producto (codigo_barras, nombre, descripcion, precio_compra, precio_venta, caducidad, stock, imagen, creacion_fecha ) VALUES (?,?,?,?,?,?,?,?, NOW())";

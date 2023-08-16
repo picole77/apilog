@@ -62,10 +62,13 @@ module.exports = (app) => {
     app.delete('/api/ventas/eliminar', salesController.delete_sale)
     // rutas para mostrar los clientes
     app.get('/api/clientes', clientController.select_all_clients)
+
+    app.get('/api/pdf/cocina/:id', pdfController.pdf_cocina)
     // rutas para mostrar los pdfs
-    app.get('/api/pdf/venta/:id', pdfController.pdf_ventas)
-    
     app.get('/api/pdf/almacen/:id', pdfController.pdf_almacen)
+    
+    app.get('/api/pdf/venta/:id', pdfController.pdf_ventas)
+
     // rutas para mostrar los roles
     app.post('/api/rol/crear', rolController.create_rol)
 
