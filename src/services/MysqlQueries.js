@@ -78,7 +78,7 @@ exports.SELECT_CATEGORY = "SELECT nombre, descripcion FROM categoria LIMIT ? OFF
 exports.UPDATE_CATEGORY = "UPDATE categoria SET nombre = ?, descripcion = ?, fecha_modificacion = NOW() WHERE id = ?"
 exports.DELETE_CATEGORY = "UPDATE categoria SET estatus = 0 WHERE id = ?"
 // ROLES
-exports.CREATE_ROL = "INSERT INTO rol (tipo_usuario) VALUES(?)"
+exports.CREATE_ROL = "INSERT INTO rol (tipo_usuario) VALUES (?)"
 exports.SELECT_ROL = "SELECT id, tipo_usuario FROM rol"
 exports.DELETE_ROL = "DELETE FROM rol WHERE id = ?"
 exports.UPDATE_ROL = "UPDATE rol SET tipo_usuario = ? WHERE id = ?"

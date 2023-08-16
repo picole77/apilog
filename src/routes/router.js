@@ -10,6 +10,7 @@ module.exports = (app) => {
     const clientController = require('../controllers/ClientController')
     const pdfController = require('../controllers/PDFController')
     const productosCocinaController = require('../controllers/ProductCocinaController')
+    const rolController = require('../controllers/RolController')
     // router para las vistas
     app.post('/login', authController.login)
 
@@ -65,4 +66,12 @@ module.exports = (app) => {
     app.get('/api/pdf/venta/:id', pdfController.pdf_ventas)
     
     app.get('/api/pdf/almacen/:id', pdfController.pdf_almacen)
+    // rutas para mostrar los roles
+    app.post('/api/rol/crear', rolController.create_rol)
+
+    app.get('/api/rol', rolController.select_rols)
+
+    app.put('/api/rol/actualizar', rolController.update_rol)
+
+    app.delete('/api/rol/eliminar', rolController.delete_rol)
 }
